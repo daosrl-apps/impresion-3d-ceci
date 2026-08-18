@@ -68,4 +68,13 @@ jobs:
             # Rebuild and run compose services with force-recreate
             docker compose up -d --build --force-recreate
             
+            # Network diagnostics
+            echo "--- DIAGNÓSTICO RED VPS ---"
+            echo "Public IP:"
+            curl -s https://ifconfig.me || true
+            echo ""
+            echo "Listening ports:"
+            ss -tlnp || true
+            echo "--- FIN DIAGNÓSTICO ---"
+            
             echo "¡Despliegue finalizado con éxito!"
