@@ -68,12 +68,7 @@ jobs:
             # Rebuild and run compose services with force-recreate
             docker compose up -d --build --force-recreate
             
-            # Diagnóstico de Certbot y Nginx Central
-            echo "--- COMPROBACIÓN CENTRAL DE PROXY ---"
-            which certbot || true
-            certbot --version || true
-            cat /etc/letsencrypt/renewal/*.conf || true
-            ls -la /opt/docker/app-dao-ops/nginx/ || true
-            echo "--- FIN COMPROBACIÓN ---"
+            # Run SSL certificate acquisition and central proxy configuration
+            python3 vps_setup_nginx.py
             
             echo "¡Despliegue finalizado con éxito!"
