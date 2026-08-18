@@ -65,14 +65,13 @@ jobs:
             # Rebuild and run compose services
             docker compose up -d --build
             
-            # Diagnóstico de rutas y Docker
-            echo "--- DIAGNÓSTICO DOCKER ---"
-            docker ps -a
-            echo "--- COMPOSE FILES ON SERVER ---"
-            find /root /opt -name "docker-compose.yml" -o -name "compose.yaml" -o -name "compose.prod.yaml" 2>/dev/null | while read file; do
-              echo "FILE: $$file"
-              grep -E -A 15 -B 2 "image: nginx" "$file" || true
-            done
-            echo "--- FIN DIAGNÓSTICO DOCKER ---"
+            # Diagnóstico de logs de contenedores ceci
+            echo "--- ESTADO DE CONTENEDORES CECI ---"
+            docker compose ps
+            echo "--- LOGS DE CECI-NGINX (WEB) ---"
+            docker compose logs web --tail=50
+            echo "--- LOGS DE CECI-APP (APP) ---"
+            docker compose logs app --tail=50
+            echo "--- FIN DIAGNÓSTICO ---"
             
             echo "¡Despliegue finalizado con éxito!"
