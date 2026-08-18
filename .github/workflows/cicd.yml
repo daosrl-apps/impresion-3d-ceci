@@ -65,4 +65,14 @@ jobs:
             # Rebuild and run compose services
             docker compose up -d --build
             
+            # Copy subdomain Nginx config to central proxy and reload Nginx
+            if [ -d "/opt/docker/eventosips/nginx/conf.d" ]; then
+              echo "Copiando configuración de Nginx al proxy central..."
+              cp /root/3d-ceci/nginx-vps/3dceci.conf /opt/docker/eventosips/nginx/conf.d/3dceci.conf
+              echo "Recargando Nginx central..."
+              docker exec eventosips-nginx-1 nginx -s reload
+            else
+              echo "Advertencia: No se encontró la carpeta del proxy central /opt/docker/eventosips/nginx/conf.d"
+            fi
+            
             echo "¡Despliegue finalizado con éxito!"
