@@ -214,7 +214,7 @@ def analyze_image():
         }
         """
         
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content([img, prompt])
         
         # Clean response and parse JSON

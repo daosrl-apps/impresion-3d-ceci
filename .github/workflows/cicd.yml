@@ -68,9 +68,4 @@ jobs:
             # Rebuild and run compose services with force-recreate
             docker compose up -d --build --force-recreate
             
-            # List available Gemini models inside container
-            echo "--- MODELOS GEMINI DISPONIBLES ---"
-            docker exec ceci-app python3 -c "import google.generativeai as genai; genai.configure(api_key='AQ.Ab8RN6IX28n3rJ-' + 'grsT--sxA-BInkLeosG8-aDjdAlUQkK4RfA'); [print(m.name) for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]" || true
-            echo "--- FIN MODELOS ---"
-            
             echo "¡Despliegue finalizado con éxito!"
