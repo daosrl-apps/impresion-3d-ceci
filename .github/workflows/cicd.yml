@@ -68,7 +68,4 @@ jobs:
             # Rebuild and run compose services with force-recreate
             docker compose up -d --build --force-recreate
             
-            # Run SSL certificate acquisition and central proxy configuration
-            python3 vps_setup_nginx.py
-            
             echo "¡Despliegue finalizado con éxito!"
