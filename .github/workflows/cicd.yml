@@ -70,11 +70,16 @@ jobs:
             
             # Network diagnostics
             echo "--- DIAGNÓSTICO RED VPS ---"
-            echo "Public IP:"
-            curl -s https://ifconfig.me || true
-            echo ""
-            echo "Listening ports:"
-            ss -tlnp || true
+            echo "Container Nginx Routes:"
+            docker exec app-dao-ops-nginx-1 ip route || true
+            echo "Testing 172.17.0.1:"
+            docker exec app-dao-ops-nginx-1 curl -I http://172.17.0.1:8085/ || true
+            echo "Testing 172.18.0.1:"
+            docker exec app-dao-ops-nginx-1 curl -I http://172.18.0.1:8085/ || true
+            echo "Testing 172.19.0.1:"
+            docker exec app-dao-ops-nginx-1 curl -I http://172.19.0.1:8085/ || true
+            echo "Testing 172.20.0.1:"
+            docker exec app-dao-ops-nginx-1 curl -I http://172.20.0.1:8085/ || true
             echo "--- FIN DIAGNÓSTICO ---"
             
             echo "¡Despliegue finalizado con éxito!"
