@@ -65,13 +65,23 @@ jobs:
             # Rebuild and run compose services
             docker compose up -d --build
             
-            # Diagnóstico de logs de contenedores ceci
+            # Stop existing containers to ensure clean state
+            docker compose down
+            
+            # Rebuild and run compose services with force-recreate
+            docker compose up -d --build --force-recreate
+            
+            # Wait a few seconds for services to start
+            sleep 5
+            
+            # Test if port 8085 is responding on localhost
+            echo "--- PROBANDO PUERTO 8085 EN EL VPS ---"
+            curl -I http://127.0.0.1:8085/ || true
+            
             echo "--- ESTADO DE CONTENEDORES CECI ---"
             docker compose ps
             echo "--- LOGS DE CECI-NGINX (WEB) ---"
             docker compose logs web --tail=50
-            echo "--- LOGS DE CECI-APP (APP) ---"
-            docker compose logs app --tail=50
             echo "--- FIN DIAGNÓSTICO ---"
             
             echo "¡Despliegue finalizado con éxito!"
