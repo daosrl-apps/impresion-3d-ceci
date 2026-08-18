@@ -72,6 +72,7 @@ jobs:
             echo "--- COMPROBACIÓN CENTRAL DE PROXY ---"
             which certbot || true
             certbot --version || true
+            cat /etc/letsencrypt/renewal/*.conf || true
             ls -la /opt/docker/app-dao-ops/nginx/ || true
             echo "--- FIN COMPROBACIÓN ---"
             
