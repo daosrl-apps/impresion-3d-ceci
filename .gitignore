@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+Datos.json
+Datos_demo.json
+data/
+uploads/
+*.log
+.vscode/
+.idea/
+.DS_Store

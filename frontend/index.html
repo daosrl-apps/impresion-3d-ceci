@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceci 3D - Diseñador de Costos & Precios</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-gradient-circles">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <span class="logo-icon"><i data-lucide="sparkles"></i></span>
+                <div class="brand-text">
+                    <h1>Ceci 3D</h1>
+                    <p>Calculadora Estética de Costos y Precios</p>
+                </div>
+            </div>
+            <button id="btnSettings" class="btn-icon" title="Configuración">
+                <i data-lucide="settings"></i>
+            </button>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-content">
+            <!-- Left Side: Inputs -->
+            <section class="card input-section">
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="manual">
+                        <i data-lucide="keyboard"></i> Carga Manual
+                    </button>
+                    <button class="tab-btn" data-tab="image">
+                        <i data-lucide="image"></i> Analizar con IA
+                    </button>
+                </div>
+
+                <div class="tab-content active" id="tab-manual">
+                    <form id="formManual">
+                        <div class="form-group">
+                            <label for="inputGrams">
+                                Gramos de PLA
+                                <span class="tooltip-trigger" title="Peso neto de la pieza impresa en gramos"><i data-lucide="help-circle"></i></span>
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="inputGrams" step="0.01" placeholder="Ej: 45.5" required min="0">
+                                <span class="input-suffix">gr</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="inputHours">Tiempo de Impresión</label>
+                                <div class="form-row-inner">
+                                    <div class="input-wrapper">
+                                        <input type="number" id="inputHours" placeholder="Horas" min="0" required>
+                                        <span class="input-suffix">hs</span>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <input type="number" id="inputMinutes" placeholder="Minutos" min="0" max="59" required>
+                                        <span class="input-suffix">min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            <i data-lucide="calculator"></i> Calcular Costo
+                        </button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="tab-image">
+                    <div class="image-upload-zone" id="dropzone">
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                        <div class="upload-prompt" id="uploadPrompt">
+                            <i data-lucide="cloud-upload" class="upload-icon"></i>
+                            <h3>Sube una foto de la pieza o captura de pantalla</h3>
+                            <p>Bambu Studio, Bambu Handy o foto real del producto</p>
+                            <button type="button" class="btn-secondary" id="btnBrowse">Seleccionar Archivo</button>
+                        </div>
+                        <div class="upload-preview" id="uploadPreview" style="display: none;">
+                            <img src="" alt="Vista previa" id="previewImg">
+                            <div class="preview-overlay">
+                                <button type="button" class="btn-danger btn-icon-small" id="btnRemoveImg" title="Quitar imagen">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-status" id="aiStatus" style="display: none;">
+                        <div class="spinner"></div>
+                        <p id="aiStatusText">La IA está analizando la imagen...</p>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="btnAnalyze" disabled>
+                        <i data-lucide="cpu"></i> Analizar e Importar
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Side: Results -->
+            <section class="card results-section" id="resultsCard">
+                <!-- Initial Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <i data-lucide="sparkles" class="empty-icon"></i>
+                    <h2>Tu Calculación Premium</h2>
+                    <p>Carga los datos de filamento y tiempo en el panel izquierdo para descubrir el desglose de costos detallado y el precio óptimo de venta.</p>
+                </div>
+
+                <!-- Active Cost View -->
+                <div class="results-content" id="resultsContent" style="display: none;">
+                    <div class="subtotal-container">
+                        <span class="subtotal-label">Costo de Producción</span>
+                        <div class="subtotal-price" id="subtotalPrice">$0,00</div>
+                    </div>
+
+                    <div class="cost-breakdown">
+                        <div class="breakdown-item">
+                            <div class="item-label">
+                                <span class="bullet bullet-material"></span>
+                                Material (PLA)
+                            </div>
+                            <div class="item-value" id="costFilament">$0,00</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="item-label">
+                                <span class="bullet bullet-energy"></span>
+                                Energía Eléctrica
+                            </div>
+                            <div class="item-value" id="costEnergy">$0,00</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="item-label">
+                                <span class="bullet bullet-amortization"></span>
+                                Amortización Máquina
+                            </div>
+                            <div class="item-value" id="costAmortization">$0,00</div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="item-label">
+                                <span class="bullet bullet-maintenance"></span>
+                                Mantenimiento Est.
+                            </div>
+                            <div class="item-value" id="costMaintenance">$0,00</div>
+                        </div>
+                    </div>
+
+                    <div class="pricing-calculator">
+                        <h3>Fijación de Rentabilidad</h3>
+                        
+                        <div class="profit-controls">
+                            <div class="form-group">
+                                <label for="profitPercent">Rentabilidad (%)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="profitPercent" value="100" min="0">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profitValue">Ganancia ($)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="profitValue" placeholder="0" min="0">
+                                    <span class="input-suffix">ARS</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="range-slider-container">
+                            <input type="range" id="profitSlider" min="0" max="400" value="100" step="5">
+                        </div>
+
+                        <div class="retail-price-container">
+                            <span class="retail-label">Precio Sugerido de Venta</span>
+                            <div class="retail-price" id="retailPrice">$0,00</div>
+                        </div>
+                    </div>
+
+                    <!-- AI Benchmark Info -->
+                    <div class="ai-benchmark-card" id="aiBenchmarkCard" style="display: none;">
+                        <div class="benchmark-header">
+                            <span class="badge"><i data-lucide="cpu"></i> Sugerencia IA</span>
+                            <span class="benchmark-range" id="benchmarkRange">$0 - $0</span>
+                        </div>
+                        <div class="benchmark-body">
+                            <p class="benchmark-explanation" id="benchmarkExplanation">Explicación del mercado...</p>
+                            <div class="price-comparison-meter">
+                                <span class="meter-label">Posicionamiento de tu precio:</span>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="meterFill"></div>
+                                </div>
+                                <div class="meter-status" id="meterStatus">Calculando...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Settings Sidebar Panel -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="settingsSidebar">
+        <div class="sidebar-header">
+            <h2>Configuración</h2>
+            <button id="btnSaveCloseSettings" class="btn-icon-small"><i data-lucide="check"></i></button>
+        </div>
+        <div class="sidebar-content">
+            <form id="formSettings">
+                <section class="settings-group">
+                    <h3>Material & Electricidad</h3>
+                    <div class="form-group">
+                        <label for="setFilamentCost">Costo PLA por kg (ARS)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setFilamentCost" step="100" value="18000">
+                            <span class="input-suffix">ARS</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="setKwhCost">Costo Electricidad kWh (ARS)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setKwhCost" step="10" value="400">
+                            <span class="input-suffix">ARS</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="setExchangeRate">Cotización Dólar (ARS/USD)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setExchangeRate" step="10" value="1000">
+                            <span class="input-suffix">ARS</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="settings-group">
+                    <h3>Amortización de Impresora</h3>
+                    <div class="form-group">
+                        <label for="setPrinterCost">Costo Impresora (USD)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setPrinterCost" step="10" value="600">
+                            <span class="input-suffix">USD</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="setPrinterLifespan">Vida Útil Estimada (Horas)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setPrinterLifespan" step="100" value="5000">
+                            <span class="input-suffix">hs</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="setMaintenancePercent">Mantenimiento (% Amortización)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="setMaintenancePercent" step="1" value="20">
+                            <span class="input-suffix">%</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="settings-group">
+                    <h3>API Gemini (IA)</h3>
+                    <div class="form-group">
+                        <label for="setGeminiKey">Gemini API Key</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="setGeminiKey" placeholder="AIzaSy...">
+                            <button type="button" class="btn-password-toggle" id="btnToggleKey">
+                                <i data-lucide="eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="settings-help">La API Key se guarda localmente en el servidor para procesar capturas y fotos.</p>
+                </section>
+                
+                <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
+                    <i data-lucide="save"></i> Guardar Configuración
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Run Python Tests (CI)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Unit Tests
+        run: |
+          python -m unittest test_server.py
+
+  deploy:
+    name: Deploy to Contabo VM (CD)
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          script: |
+            echo "Conectado al servidor. Iniciando actualización de Impresión 3D Ceci..."
+            
+            # Ensure the deployment directory exists on the host
+            if [ ! -d "/root/3d-ceci" ]; then
+              echo "Creando directorio /root/3d-ceci y clonando repositorio..."
+              git clone https://github.com/daosrl-apps/impresion-3d-ceci.git /root/3d-ceci
+            fi
+            
+            cd /root/3d-ceci
+            
+            # Fetch latest code
+            git fetch --all
+            git reset --hard origin/master
+            
+            # Ensure data directory exists on the host to avoid docker volume creation issues
+            mkdir -p data/uploads
+            chmod -R 777 data
+            
+            # Rebuild and run compose services
+            docker compose up -d --build
+            
+            echo "¡Despliegue finalizado con éxito!"

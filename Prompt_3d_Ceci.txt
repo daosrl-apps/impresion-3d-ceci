@@ -1,0 +1,18 @@
+Quiero una web app.
+Quiero que uses el sub dominio “ceci” que he creado en mi dominio daosrl.com.ar
+Quiero que uses mi repositorio, la VM, las buenas prácticas y todo como lo venís haciendo con la app de “planta”
+Quiero que la app se pueda ver desde una pc o desde un teléfono, y que sea autoajustable a la pantalla de cualquier teléfono.
+Quiero que la app tenga un fondo y un formato que transmita elegancia, dulzura y buen gusto. Es para un emprendimiento de venta de cosas impresas en 3d. la gente que lo va a mirar es gente de buenos recursos económicos, de mucho glamur y muy delicada.
+Quiero que la app sea muy sencilla. Básicamente es una app para calcular el costo y el precio de venta. Si bien en principio, va a ser utilizada solo por Cecilia, creo que a futuro podría ser incluida en alguna red social donde se publiquen los productos que imprima Cecilia para vender. Por eso te pido que sea de buen gusto.
+Básicamente, quiero que la app calcule el costo y un precio de venta tentativo. 
+Para el costo debe tener en cuenta:
+Los gramos de PLA que voy a utilizar.
+El tiempo de impresión.
+La energía eléctrica consumida.
+Amortización de la impresora.
+Mantenimiento de la impresora.
+Los gramos que utiliza cada pieza a imprimir, lo debería poder cargar a mano (mediante un campo) o bien subiendo una foto de la pieza. Asique debería tener las dos opciones. Si subo una foto, y la foto es de la app de diseño de donde saco los modelos (bambu studio o bambu hundy), ahí figura los gramos y el tiempo que tarda. Pero si te subo una foto donde no este esa información, quiero que analices y mediante la IA puedas hacer un cálculo aproximado buscando en la web esa pieza.
+ La impresora es una bambu lab A1 combo. El costo de la impresora fue de u$d 600 y quiero amortizarla en 5.000 hs de impresión. 
+La energía consumida debes obtenerla de algún manual de bambu lab donde mencione el consumo. El costo de kw/h que tengo es de $400. Este valor de $400 por cada kw/h debe poder ser editable, pensando que en algún momento puede variar. Mientras que el consumo de la maquina no, porque se supone que siempre consume lo mismo.
+Para el mantenimiento quiero que estimes un valor buscando información en bambulab o en foros en función de lo que sugiera el fabricante (no tengo idea de cuánto es) y que lo pongas en un campo editable para poder ir corrigiéndolo a medida que pase el tiempo. O bien podés asignarle un % por hora de impresión, en función de la amortización. Por ejemplo, si la amortización da una cuota de “$X” entonces el mantenimiento que sea un $ de ese valor. Decidí vos que es lo mejor.
+Resumiendo, quiero poder entrar a la app, y poder subir una foto de la foto que quiero imprimir, o bien, en caso de no tener foto, tener que cargar a mano el peso de la pieza y el tiempo de impresión. Y que la app me calcule el costo (detallado) con un subtotal de costo, un campo con la rentabilidad (en $ y porcentual) y finalmente el precio tentativo de venta (el cual deberías cotejar mediante IA en paginas web, foros etc). el campo de rentabilidad (en $ y %) debe ser editable y el precio se debe reajustar a lo que yo modifique (esto es por si el precio que vos me sugerís no me gusta y quiero poner algo mayor o menor).
