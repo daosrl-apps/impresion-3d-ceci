@@ -62,8 +62,17 @@ jobs:
             mkdir -p data/uploads
             chmod -R 777 data
             
-            # Rebuild and run compose services with force-recreate to ensure configuration updates
+            # Stop existing containers to ensure clean state
             docker compose down
+            
+            # Rebuild and run compose services with force-recreate
             docker compose up -d --build --force-recreate
+            
+            # Diagnóstico de Certbot y Nginx Central
+            echo "--- COMPROBACIÓN CENTRAL DE PROXY ---"
+            which certbot || true
+            certbot --version || true
+            ls -la /opt/docker/app-dao-ops/nginx/ || true
+            echo "--- FIN COMPROBACIÓN ---"
             
             echo "¡Despliegue finalizado con éxito!"
