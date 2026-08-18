@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ceci 3D - Diseñador de Costos & Precios</title>
+    <title>Calculadora 3D</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +25,8 @@
             <div class="brand">
                 <span class="logo-icon"><i data-lucide="sparkles"></i></span>
                 <div class="brand-text">
-                    <h1>Ceci 3D</h1>
-                    <p>Calculadora Estética de Costos y Precios</p>
+                    <h1>Calculadora 3D</h1>
+                    <p>Costos y Precios de Venta</p>
                 </div>
             </div>
             <button id="btnSettings" class="btn-icon" title="Configuración">
@@ -38,6 +38,18 @@
         <main class="main-content">
             <!-- Left Side: Inputs -->
             <section class="card input-section">
+                <!-- Costo de Filamento visible y editable -->
+                <div class="form-group main-filament-price" style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(179, 130, 146, 0.1); padding-bottom: 1.25rem;">
+                    <label for="inputFilamentCost">
+                        Precio del Filamento PLA (por kg)
+                        <span class="tooltip-trigger" title="Costo del rollo de filamento de 1kg en pesos. Se guarda automáticamente al calcular."><i data-lucide="help-circle"></i></span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="inputFilamentCost" step="100" placeholder="Ej: 18000" required min="0">
+                        <span class="input-suffix">ARS / kg</span>
+                    </div>
+                </div>
+
                 <div class="tab-container">
                     <button class="tab-btn active" data-tab="manual">
                         <i data-lucide="keyboard"></i> Carga Manual

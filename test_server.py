@@ -85,5 +85,29 @@ class TestCeci3DCostCalculator(unittest.TestCase):
         self.assertEqual(data["breakdown"]["maintenance"], 90.0)
         self.assertEqual(data["subtotal"], 2562.5)
 
+    def test_calculate_cost_with_custom_filament_price(self):
+        # Input custom filament price of $24000.0 ARS/kg ($24 ARS/g)
+        # Expected outputs:
+        # 1. Filament: 100g * (24000/1000) = $2400.0 ARS
+        # Other items remain same: Energy = 112.5, Amortization = 360.0, Maintenance = 90.0
+        # Subtotal: 2400.0 + 112.5 + 360.0 + 90.0 = $2962.5 ARS
+        calc_input = {
+            "grams": 100.0,
+            "hours": 2,
+            "minutes": 30,
+            "costo_filamento_kg": 24000.0
+        }
+        response = self.client.post('/api/calculate', json=calc_input)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        
+        self.assertEqual(data["breakdown"]["filament"], 2400.0)
+        self.assertEqual(data["subtotal"], 2962.5)
+        
+        # Verify it was updated in config too
+        response_config = self.client.get('/api/config')
+        config_data = json.loads(response_config.data)
+        self.assertEqual(config_data["costo_filamento_kg"], 24000.0)
+
 if __name__ == '__main__':
     unittest.main()

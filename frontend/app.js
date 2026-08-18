@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
+    const inputFilamentCost = document.getElementById('inputFilamentCost');
+    
     // DOM Elements - Manual Tab
     const formManual = document.getElementById('formManual');
     const inputGrams = document.getElementById('inputGrams');
@@ -79,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             appConfig = await response.json();
             
             // Populate settings form
+            inputFilamentCost.value = appConfig.costo_filamento_kg;
             setFilamentCost.value = appConfig.costo_filamento_kg;
             setKwhCost.value = appConfig.costo_kwh;
             setExchangeRate.value = appConfig.cotizacion_dolar;
@@ -90,6 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set default markup in profit fields
             profitPercent.value = appConfig.rentabilidad_defecto || 100;
             profitSlider.value = appConfig.rentabilidad_defecto || 100;
+            
+            // Sync main input with settings input
+            inputFilamentCost.addEventListener('input', (e) => {
+                setFilamentCost.value = e.target.value;
+            });
+            setFilamentCost.addEventListener('input', (e) => {
+                inputFilamentCost.value = e.target.value;
+            });
             
         } catch (error) {
             showToast("⚠️ Error al conectar con el servidor backend");
@@ -121,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const grams = parseFloat(inputGrams.value);
         const hours = parseInt(inputHours.value) || 0;
         const minutes = parseInt(inputMinutes.value) || 0;
+        const filamentCost = parseFloat(inputFilamentCost.value) || 0;
 
         if (isNaN(grams) || grams < 0) {
             showToast("Por favor, ingresa un peso de filamento válido.");
@@ -135,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/calculate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ grams, hours, minutes })
+                body: JSON.stringify({ grams, hours, minutes, costo_filamento_kg: filamentCost })
             });
 
             if (!response.ok) throw new Error("Error en el cálculo");

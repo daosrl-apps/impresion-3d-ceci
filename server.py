@@ -113,6 +113,11 @@ def calculate_cost():
         
         config = load_config()
         
+        # Update and save filament cost if provided by client on main screen
+        if "costo_filamento_kg" in data:
+            config["costo_filamento_kg"] = float(data["costo_filamento_kg"])
+            save_config(config)
+        
         # 1. Costo de filamento (PLA)
         cost_filament = grams * (config["costo_filamento_kg"] / 1000.0)
         
