@@ -65,17 +65,14 @@ jobs:
             # Rebuild and run compose services
             docker compose up -d --build
             
-            # Diagnóstico de rutas
-            echo "--- DIAGNÓSTICO DE RUTAS ---"
-            echo "Usuario actual: $$(whoami)"
-            echo "Listando /opt:"
-            ls -la /opt || true
-            echo "Listando /opt/docker:"
-            ls -la /opt/docker || true
-            echo "Buscando nginx en /opt y /etc:"
-            find /opt /etc -name "nginx" -type d 2>/dev/null || true
-            echo "Buscando conf.d en /opt y /etc:"
-            find /opt /etc -name "conf.d" -type d 2>/dev/null || true
-            echo "--- FIN DIAGNÓSTICO ---"
+            # Diagnóstico de rutas y Docker
+            echo "--- DIAGNÓSTICO DOCKER ---"
+            docker ps -a
+            echo "--- COMPOSE FILES ON SERVER ---"
+            find /root /opt -name "docker-compose.yml" -o -name "compose.yaml" -o -name "compose.prod.yaml" 2>/dev/null | while read file; do
+              echo "FILE: $$file"
+              grep -E -A 15 -B 2 "image: nginx" "$file" || true
+            done
+            echo "--- FIN DIAGNÓSTICO DOCKER ---"
             
             echo "¡Despliegue finalizado con éxito!"
